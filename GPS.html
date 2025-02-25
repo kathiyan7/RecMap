@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            /* background: linear-gradient(45deg, #0f2027, #203a43, #2c5364); */
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            animation: background-flow 10s infinite alternate;
+        }
+        
+        @keyframes background-flow {
+            0% { background-position: left; }
+            100% { background-position: right; }
+        }
+
+        h2 {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff5733;
+            color: white;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        #map-container {
+            position: relative;
+            width: 800px;
+            height: 500px;
+            background: url('BusMap.jpg') no-repeat center center;
+            background-size: cover;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.2);
+            transition: transform 0.5s;
+        }
+        
+        #map-container:hover {
+            transform: rotateX(10deg) rotateY(10deg);
+        }
+
+        .location {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            box-shadow: 0px 0px 10px red;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .location:hover {
+            transform: scale(1.5);
+            box-shadow: 0px 0px 20px yellow;
+        }
+
+        #path {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #directions {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.2);
+        }
+
+        #chatbot-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: #007bff;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, background-color 0.3s;
+    }
+
+    #chatbot-icon:hover {
+        transform: scale(1.1);
+        background-color: #0056b3;
+    }
+
+    /* Chatbot Container (Hidden by Default) */
+    #chatbot-container {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: none; /* Initially hidden */
+        flex-direction: column;
+    }
+
+    /* Chatbot Header */
+    #chatbot-header {
+        background: #007bff;
+        color: white;
+        padding: 10px;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #chatbot-header button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    /* Chatbot Iframe */
+    #chatbot-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    </style>
+</head>
+<body>
+
+    <h2>College Indoor Navigation</h2>
+    <label for="start">Start Location:</label>
+    <select id="start">
+        <!-- <option value="main_gate">Main Gate</option> -->
+        <option value="library">Library</option>
+        <option value="rec_cafe">REC Cafe</option>
+        <option value="main_hall">Main Hall</option>
+        <option value="rec_mart">REC Mart</option>
+        <option value="hut_cafe">HUT Cafe</option>
+        <option value="maggi_spot">Maggi Spot</option>
+        <option value="aero_block">Aero Block</option>
+        <!-- <option value="admin_office">Admin Office</option> -->
+        <!-- <option value="purple_hall">Purple Hall</option> -->
+        <!-- <option value="air_craft">Air Craft</option> -->
+        <option value="indoor_auditorium">Indoor Auditorium</option>
+        <option value="central_workshop">Central Workshop</option>
+        <option value="mechnical_workshop">Mechnical Workshop</option>
+        <option value="hertiage_hall">Hertiage Hall</option>
+    </select>
+
+    <label for="end">Destination:</label>
+    <select id="end">
+        <!-- <option value="main_gate">Main Gate</option> -->
+        <option value="library">Library</option>
+        <option value="rec_cafe">REC Cafe</option>
+        <option value="main_hall">Main Hall</option>
+        <option value="rec_mart">REC Mart</option>
+        <option value="hut_cafe">HUT Cafe</option>
+        <option value="maggi_spot">Maggi Spot</option>
+        <option value="aero_block">Aero Block</option>
+        <!-- <option value="admin_office">Admin Office</option> -->
+        <!-- <option value="purple_hall">Purple Hall</option> -->
+        <!-- <option value="air_craft">Air Craft</option> -->
+        <option value="indoor_auditorium">Indoor Auditorium</option>
+        <option value="central_workshop">Central Workshop</option>
+        <option value="mechnical_workshop">Mechnical Workshop</option>
+        <option value="hertiage_hall">Hertiage Hall</option>
+    </select>
+
+    <button onclick="navigate()">Get Route</button>
+
+    <div id="map-container">
+        <!-- Define location points on the map -->
+        <div class="location" id="main_gate" style="top: 460px; left: 50px;"></div>
+        <div class="location" id="library" style="top: 05px; left: 480px;" ></div>
+        <div class="location" id="rec_cafe" style="top: 490px; left: 550px;"></div>
+        <div class="location" id="main_hall" style="top: 300px; left: 400px;"></div>
+        <div class="location" id="rec_mart" style="top: 220px; left: 495px;"></div>
+        <div class="location" id="hut_cafe" style="top: 250px; left: 650px;"></div>
+        <div class="location" id="maggi_spot" style="top: 250px; left: 550px;"></div>
+        <div class="location" id="aero_block" style="top: 420px; left: 650px;"></div>
+        <div class="location" id="admin_office" style="top: 140px; left: 306px;"></div>
+        <div class="location" id="purple_hall" style="top: 150px; left: 340px;"></div>
+        <div class="location" id="air_craft" style="top: 370px; left: 280px;"></div>
+        <div class="location" id="indoor_auditorium" style="top: 05px; left: 550px;"></div>
+        <div class="location" id="central_workshop" style="top: 300px; left: 650px;"></div>
+        <div class="location" id="mechnical_workshop" style="top: 350px; left: 650px;"></div>
+        <div class="location" id="hertiage_hall" style="top: 490px; left: 650px;"></div>
+        
+        <!-- Canvas for drawing paths -->
+        <canvas id="path"></canvas>
+    </div>
+
+    <p id="directions"></p>
+
+    <div id="chatbot-icon" onclick="toggleChat()">
+        💬
+    </div>
+    
+    <div id="chatbot-container">
+        <!-- <div id="chatbot-header">
+            <span>Chatbot</span>
+            <button onclick="toggleChat()">✖</button>
+        </div> -->
+        <iframe id="chatbot-frame" src="https://notes-chatbot-eight.vercel.app/" frameborder="0"></iframe>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
